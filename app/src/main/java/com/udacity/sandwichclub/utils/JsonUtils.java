@@ -18,7 +18,7 @@ public class JsonUtils {
         String image;
 
         try{
-            //get the root JSONObject
+            //get the main JSONObject
             JSONObject mainSandwichesJSON = new JSONObject(json);
 
             JSONObject nameProperties = mainSandwichesJSON.getJSONObject("name");
@@ -31,6 +31,7 @@ public class JsonUtils {
                 alsoKnownAs.add(i, alsoKnownAsArray.getString(i));
 
             }
+
 
             JSONArray ingredientsArray = mainSandwichesJSON.getJSONArray("ingredients");
             ingredients = new ArrayList<>();
