@@ -9,6 +9,15 @@ import java.util.List;
 
 public class JsonUtils {
 
+    public static final String KEY_NAME = "name";
+    public static final String KEY_MAIN_NAME = "mainName";
+    public static final String KEY_KNOWN_AS = "alsoKnownAs";
+    public static final String KEY_INGREDIENTS = "ingredients";
+    public static final String KEY_ORIGIN = "placeOfOrigin";
+    public static final String KEY_DESCRIPTION = "description";
+    public static final String KEY_IMAGE = "image";
+
+
     public static Sandwich parseSandwichJson(String json) {
         String mainName;
         List<String> alsoKnownAs;
@@ -17,40 +26,41 @@ public class JsonUtils {
         List<String> ingredients;
         String image;
 
+
         try{
             //get the main JSONObject
             JSONObject mainSandwichesJSON = new JSONObject(json);
 
-            JSONObject nameProperties = mainSandwichesJSON.getJSONObject("name");
+            JSONObject nameProperties = mainSandwichesJSON.optJSONObject(KEY_NAME);
 
-            mainName = nameProperties.getString("mainName");
-            JSONArray alsoKnownAsArray = nameProperties.getJSONArray("alsoKnownAs");
+            mainName = nameProperties.optString(KEY_MAIN_NAME);
+            JSONArray alsoKnownAsArray = nameProperties.optJSONArray(KEY_KNOWN_AS);
             alsoKnownAs = new ArrayList<>();
             //iterate through the array of names using JSONArray
             for (int i = 0; i < alsoKnownAsArray.length(); i++) {
-                alsoKnownAs.add(i, alsoKnownAsArray.getString(i));
+                alsoKnownAs.add(i, alsoKnownAsArray.optString(i));
 
             }
 
 
-            JSONArray ingredientsArray = mainSandwichesJSON.getJSONArray("ingredients");
+            JSONArray ingredientsArray = mainSandwichesJSON.optJSONArray(KEY_INGREDIENTS);
             ingredients = new ArrayList<>();
             //iterate through the array of ingredients
             for (int i = 0; i < ingredientsArray.length(); i++) {
-                ingredients.add(i, ingredientsArray.getString(i));
+                ingredients.add(i, ingredientsArray.optString(i));
 
             }
 
-            origin = mainSandwichesJSON.getString("placeOfOrigin");
-            description = mainSandwichesJSON.getString("description");
-            image = mainSandwichesJSON.getString("image");
+            origin = mainSandwichesJSON.optString(KEY_ORIGIN);
+            description = mainSandwichesJSON.optString(KEY_DESCRIPTION);
+            image = mainSandwichesJSON.optString(KEY_IMAGE);
 
         }catch (JSONException e) {
             throw new RuntimeException(e);
         }
-        //initializing the main Sandwich object with data from the JSONObject we got from here and returning it
-        Sandwich sandwich = new Sandwich(mainName, alsoKnownAs ,origin, description, image, ingredients);
-        return sandwich;
+
+        //returning data got from JSON
+        return new Sandwich(mainName, alsoKnownAs ,origin, description, image, ingredients);
 
     }
 }

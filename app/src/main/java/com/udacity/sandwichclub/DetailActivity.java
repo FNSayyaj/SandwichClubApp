@@ -3,6 +3,7 @@ package com.udacity.sandwichclub;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -18,11 +19,11 @@ public class DetailActivity extends AppCompatActivity {
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
     ImageView image_iv;
-    TextView ingredientsIv;
-    TextView descriptionIv;
-    TextView knownAsIv;
-    TextView originIv;
-    ProgressBar progressBarIv;
+    TextView ingredients_tv;
+    TextView description_tv;
+    TextView knownAs_tv;
+    TextView origin_tv;
+    ProgressBar progressBar_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +31,12 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         image_iv =  findViewById(R.id.image_iv);
-        ingredientsIv = findViewById(R.id.ingredients_tv);
-        descriptionIv = findViewById(R.id.description_tv);
-        knownAsIv = findViewById(R.id.also_known_tv);
-        originIv = findViewById(R.id.origin_tv);
-        progressBarIv = findViewById(R.id.progressBar_tv);
+        ingredients_tv = findViewById(R.id.ingredients_tv);
+        description_tv = findViewById(R.id.description_tv);
+        knownAs_tv = findViewById(R.id.also_known_tv);
+        origin_tv = findViewById(R.id.origin_tv);
+        progressBar_tv = findViewById(R.id.progressBar_tv);
+
 
 
 
@@ -71,34 +73,34 @@ public class DetailActivity extends AppCompatActivity {
 
     //method that populate the UI from the parsed JSON
     private void populateUI(Sandwich sandwich) {
-        progressBarIv.setVisibility(View.VISIBLE);
+        progressBar_tv.setVisibility(View.VISIBLE);
 
 
         Picasso.with(this).load(sandwich.getImage()).into(image_iv, new Callback.EmptyCallback() {
             //make the progressbar disappear when the image is done loading
             @Override public void onSuccess() {
-                progressBarIv.setVisibility(View.INVISIBLE);
+                progressBar_tv.setVisibility(View.INVISIBLE);
                 image_iv.setVisibility(View.VISIBLE);
             }
         });
 
         setTitle(sandwich.getMainName());
-        descriptionIv.setText(sandwich.getDescription());
+        description_tv.setText(sandwich.getDescription());
         //check that the array of the alternative names is not empty
         if (sandwich.getAlsoKnownAs().isEmpty()) {
-            knownAsIv.setText("No Data Found");
+            knownAs_tv.setText(R.string.data_not_found);
 
         }else{
-            knownAsIv.setText(sandwich.getAlsoKnownAs().toString());
+            knownAs_tv.setText(TextUtils.join(", ", sandwich.getAlsoKnownAs()));
         }
 
-        ingredientsIv.setText(sandwich.getIngredients().toString());
+        ingredients_tv.setText(TextUtils.join(", ", sandwich.getIngredients()));
         //check that the object of the origin is not empty
         if(sandwich.getPlaceOfOrigin().equals("")) {
-            originIv.setText("No Data Found");
+            origin_tv.setText(R.string.data_not_found);
 
         }else{
-            originIv.setText(sandwich.getPlaceOfOrigin());
+            origin_tv.setText(sandwich.getPlaceOfOrigin());
         }
 
     }
